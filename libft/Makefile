@@ -17,6 +17,7 @@ CFLAGST = -Wall -Wextra -ansi -pedantic
 NAME = libft.a
 LIB = ar rc
 FONCTIONS = get_next_line.c \
+			gnl_sock.c \
 			ft_swap.c \
 			ft_memset.c \
 			ft_memcpy.c \
@@ -64,6 +65,8 @@ FONCTIONS = get_next_line.c \
 			ft_putchar_fd.c \
 			ft_putstr_fd.c \
 			ft_putendl_fd.c \
+			ft_putendl_sock.c \
+			ft_putendleot_sock.c \
 			ft_putnbr_fd.c \
 			ft_strsub.c \
 			ft_strrev.c \

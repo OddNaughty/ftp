@@ -6,7 +6,7 @@
 /*   By: cwagner <cwagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/19 15:57:06 by cwagner           #+#    #+#             */
-/*   Updated: 2014/05/13 17:46:09 by cwagner          ###   ########.fr       */
+/*   Updated: 2014/05/14 18:32:19 by cwagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define FAILURE -1
 # define SUCCESS 0
 # define CONTINUE -2
+# define EOT "Qqengn48eiyt0+87\"ol`dm"
 
 typedef unsigned int			t_ui;
 typedef struct s_charlist		t_charlist;
@@ -50,6 +51,7 @@ void			ft_addblchar(t_charlist **list, char *str);
 t_charlist		*ft_lstsplit(char *str, char c);
 
 int				get_next_line(int const fd, char **line);
+int				gnl_sock(int const fd, char **line);
 
 void			*ft_memset(void *b, int c, size_t len);
 void			ft_bzero(void *s, size_t n);
@@ -117,6 +119,8 @@ void			ft_putnbr(int n);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char const *s, int fd);
 void			ft_putendl_fd(char const *s, int fd);
+void			ft_putendl_sock(char const *s, int fd);
+void			ft_putendleot_sock(char const *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
 void			ft_printtabchar(char **table);
 
