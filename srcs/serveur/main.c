@@ -15,39 +15,58 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+static int		treatment(int sock, int cs)
+{
+	t_data				data;
 
-int		main(int ac, char **av)
+	close(sock);
+	data.fd_sock = cs;
+	data.pwd = ft_strdup("./");
+	while (ft_putstr("A l'écoute : "), gnl_sock(cs, &(data.str)))
+	{
+		if (ft_strcmp(data.str, "quit") == SUCCESS)
+			break ;
+		if (data.str || *(data.str))
+		{
+			ft_putendl(data.str);
+			interpret(&data);
+			ft_strdel(&(data.str));
+		}
+	}
+	close(cs);
+	exit (SUCCESS);
+}
+
+static int		acpt(int sock)
+{
+	int 				cs;
+	unsigned int		addr_len;
+	struct sockaddr_in	addr;
+
+	while (1)
+	{
+		addr_len = sizeof(addr);
+		cs = accept(sock, (struct sockaddr *)&addr, &addr_len);
+		if (!fork())
+			treatment(sock, cs);
+		else
+			close(cs);
+	}
+	return (SUCCESS);
+}
+
+int			main(int ac, char **av)
 {
 	int					port;
 	int					sock;
-	int					cs;
-	unsigned int		addr_len;
-	struct sockaddr_in	addr;
-	char				*str;
-	t_data				data;
 
 	if (ac != 2)
 		return (ft_error("Usage: ./serveur port"));
 	port = ft_atoi(av[1]);
 	if ((sock = create_server(port)) == FAILURE)
 		return (FAILURE);
-	addr_len = sizeof(addr);
-	cs = accept(sock, (struct sockaddr *)&addr, &addr_len);
-	g_pwd = "/";
-	data.fd_sock = cs;
-	while (ft_putstr("A l'écoute: "), gnl_sock(cs, &str))
-	{
-		if (ft_strcmp(str, "quit") == SUCCESS)
-			break ;
-		if (str || *str)
-		{
-			data.str = ft_strdup(str);
-			interpret(&data);
-			ft_putendl(str);
-			ft_strdel(&str);
-		}
-	}
-	close(cs);
+	if (acpt(sock) == FAILURE)
+		return (FAILURE);
 	close(sock);
 	return (SUCCESS);
 }

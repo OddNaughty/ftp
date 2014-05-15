@@ -33,7 +33,8 @@ SDIR = 		$(SRCS)serveur/
 SFILES =	main.c\
 			create.c\
 			interpret.c\
-			func1.c
+			func1.c\
+			tools.c
 
 SERVER =	$(addprefix $(SDIR), $(SFILES))
 

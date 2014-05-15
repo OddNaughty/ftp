@@ -1,36 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_p.h                                             :+:      :+:    :+:   */
+/*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cwagner <cwagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/05/13 11:38:48 by cwagner           #+#    #+#             */
-/*   Updated: 2014/05/14 18:31:57 by cwagner          ###   ########.fr       */
+/*   Created: 2014/05/15 21:17:16 by cwagner           #+#    #+#             */
+/*   Updated: 2014/05/15 21:17:17 by cwagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_P
-# define FT_P
-
-typedef struct s_data
+static int	get_file(char *str)
 {
-	int 		fd_sock;
-	char		*str;
-	char		*pwd;
-}				t_data;
 
-int		create_server(int port);
-int		create_client(char *addr, int port);
+}
 
-int 	interpret(t_data *data);
+int	cmd_files(char *str)
+{
+	char	**split;
 
-int 	ftp_ls(t_data *data);
-int 	ftp_cd(t_data *data);
-int 	ftp_pwd(t_data *data);
-int 	ftp_get(t_data *data);
-int 	ftp_put(t_data *data);
+	split = ft_strsplitwhite(str);
+	if ((ft_strcmp(split[0], "get") == SUCCESS) && split[1])
+	{
+		if (get_file(split[1]) == FAILURE)
+			return (FAILURE);
+	}
+	else if (ft_strcmp(split[0], "put") == SUCCESS)
+	{
 
-int 	handle_path(t_data *data, char *path);
-
-#endif
+	}
+	return (CONTINUE);
+}
