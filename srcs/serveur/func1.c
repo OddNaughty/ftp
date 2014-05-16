@@ -14,6 +14,7 @@
 #include "ft_p.h"
 #include <dirent.h>
 #include <errno.h>
+#include <sys/socket.h>
 
 int 	ftp_ls(t_data *data)
 {
@@ -72,7 +73,10 @@ int 	ftp_cd(t_data *data)
 int 	ftp_get(t_data *data)
 {
 	char	**split;
-	char 	*str;
+	char	*str;
+	char	*tosend;
+	int		fd;
+	int		size;
 
 	str = data->str;
 	if ((split = ft_strsplitwhite(str)) == NULL)
@@ -82,16 +86,68 @@ int 	ftp_get(t_data *data)
 		ft_freechartab(&split);
 		return (CONTINUE);
 	}
-	if (!split[1])
+	tosend = ft_strnew(1024);
+	if ((fd = open(ft_strjoin(data->pwd, split[1]), O_RDONLY)) == FAILURE)
 	{
+		tosend = ft_strcpy(tosend, EOT);
+		tosend = ft_strjoin(tosend, "Can't open file...");
+		send(data->fd_sock, tosend, 1024, 0);
+		return (FAILURE);
 	}
-	return (CONTINUE);
+	while ((size = read(fd, tosend, 1024)) > 0)
+	{
+		send(data->fd_sock, tosend, size, 0);
+		ft_strdel(&tosend);
+		tosend = ft_strnew(1024);
+	}
+	if (size != FAILURE)
+	{
+		send(data->fd_sock, tosend, size, 0);
+		ft_strdel(&tosend);
+	}
+	close (fd);
+	return (SUCCESS);
 }
 
 int 	ftp_put(t_data *data)
 {
-	(void)data;
-	return (CONTINUE);
+	char	**split;
+	char	**split2;
+	char	*file;
+	int		fd;
+	char	*str;
+	int		size;
+
+	split = ft_strsplitwhite(data->str);
+	if (ft_strcmp(split[0], "put") != SUCCESS)
+		return (CONTINUE);
+	str = ft_strnew(1024);
+	if ((size = recv(data->fd_sock, str, 1024, 0)) == FAILURE)
+		return (FAILURE);
+	if (ft_strncmp(EOT, str, ft_strlen(EOT)) == SUCCESS)
+		return (SUCCESS);
+	split2 = ft_strsplit(split[1], '/');
+	file = split2[ft_chartablength(split2) - 1];
+	fd = open(ft_strjoin(data->pwd, file), O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	write(fd, str, size);
+	if (size < 1024)
+	{
+		close(fd);
+		return (SUCCESS);
+	}
+	str = ft_strnew(1024);
+	while ((size = recv(data->fd_sock, str, 1024, 0)) == 1024)
+	{
+		write(fd, str, size);
+		ft_strdel(&str);
+		str = ft_strnew(1024);
+	}
+	if (size == FAILURE)
+		return (SUCCESS);
+	write(fd, str, size);
+	ft_strdel(&str);
+	close (fd);
+	return (SUCCESS);
 }
 
 int 	ftp_pwd(t_data *data)

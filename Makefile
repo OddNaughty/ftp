@@ -41,7 +41,8 @@ SERVER =	$(addprefix $(SDIR), $(SFILES))
 
 CDIR =		$(SRCS)client/
 CFILES =	main.c\
-			create.c
+			create.c\
+			files.c
 
 
 CLIENT =	$(addprefix $(CDIR), $(CFILES))

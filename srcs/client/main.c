@@ -30,7 +30,7 @@ static int 	receive(int sock, char *str)
 		ft_strdel(&str);
 		return (FAILURE);
 	}
-	if (cmd_file(str) != CONTINUE)
+	if (cmd_files(str, sock) != CONTINUE)
 		return (SUCCESS);
 	ft_strdel(&str);
 	while (gnl_sock(sock, &str) > 0)
@@ -57,7 +57,7 @@ int		main(int ac, char **av)
 	port = ft_atoi(av[2]);
 	if ((sock = create_client(av[1], port)) == FAILURE)
 		return (FAILURE);
-	while (ft_putstr("\033[35mCeciEstUnPrompt>\033[0m "), get_next_line(0, &str))
+	while (ft_putstr("\033[36mCeciEstUnPrompt>\033[0m "), get_next_line(0, &str))
 	{
 		if (receive(sock, str) == FAILURE)
 			break ;

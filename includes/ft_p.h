@@ -33,4 +33,7 @@ int 	ftp_put(t_data *data);
 
 int 	handle_path(t_data *data, char *path);
 
+int 	cmd_files(char *str, int sock);
+
+
 #endif
