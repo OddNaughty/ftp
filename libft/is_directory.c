@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   is_directory.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwagner <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: cwagner <cwagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/21 21:21:18 by cwagner           #+#    #+#             */
-/*   Updated: 2014/03/27 15:00:43 by cwagner          ###   ########.fr       */
+/*   Created: 2015/10/30 19:23:35 by cwagner           #+#    #+#             */
+/*   Updated: 2015/10/30 19:23:38 by cwagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include <sys/stat.h>
+#include "libft.h"
 
-int		ft_strncmp(const char *s1, const char *s2, size_t n)
+int				is_directory(char *path)
 {
-	unsigned int	i;
+	struct stat	mydir;
 
-	i = 0;
-	while (i < n && (s1[i] != '\0') && (s1[i] == s2[i]))
-		i++;
-	if (i == n)
-		return (0);
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	if (stat(path, &mydir))
+		return (FAILURE);
+	return (S_ISDIR(mydir.st_mode));
 }

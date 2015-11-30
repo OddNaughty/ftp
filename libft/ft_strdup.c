@@ -18,8 +18,8 @@ char	*ft_strdup(const char *s1)
 	unsigned int	len;
 
 	len = ft_strlen(s1);
-	ss1 = malloc ((1 + len) * sizeof(char));
-	if (ss1 == NULL)
+	ss1 = malloc((1 + len) * sizeof(char));
+	if (ss1 == NULL || s1 == NULL)
 		return (NULL);
 	ft_memcpy(ss1, s1, len + 1);
 	return (ss1);

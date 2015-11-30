@@ -14,16 +14,19 @@
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	if (n < 0)
+	long int	overflow;
+
+	overflow = n;
+	if (overflow < 0)
 	{
 		ft_putchar_fd('-', fd);
-		n = -n;
+		overflow = -overflow;
 	}
-	if (n >= 10)
+	if (overflow >= 10)
 	{
-		ft_putnbr_fd(n / 10, fd);
-		ft_putnbr_fd(n % 10, fd);
+		ft_putnbr_fd(overflow / 10, fd);
+		ft_putnbr_fd(overflow % 10, fd);
 	}
 	else
-		ft_putchar_fd(n + 48, fd);
+		ft_putchar_fd(overflow + 48, fd);
 }

@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr.c                                        :+:      :+:    :+:   */
+/*   ft_strostr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwagner <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: sbuono <sbuono@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/25 22:52:00 by cwagner           #+#    #+#             */
-/*   Updated: 2015/01/21 22:17:57 by cwagner          ###   ########.fr       */
+/*   Created: 2013/11/26 16:08:49 by sbuono            #+#    #+#             */
+/*   Updated: 2013/11/26 16:08:51 by sbuono           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putnbr(int n)
+unsigned int		ft_strostr(const char *src, const char *s1)
 {
-	long int	overflow;
+	unsigned int		nb;
 
-	overflow = n;
-	if (overflow < 0)
+	nb = 0;
+	while (*src)
 	{
-		ft_putchar('-');
-		overflow = -overflow;
+		if (*src == *s1 && !(ft_strncmp(src, s1, ft_strlen(s1))))
+		{
+			++nb;
+			src = src + (ft_strlen(s1));
+		}
+		else
+			src++;
 	}
-	if (overflow >= 10)
-	{
-		ft_putnbr(overflow / 10);
-		ft_putnbr(overflow % 10);
-	}
-	else
-		ft_putchar(overflow + 48);
+	return (nb);
 }

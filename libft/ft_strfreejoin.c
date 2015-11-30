@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_strfreejoin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwagner <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: cwagner <cwagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/21 21:21:18 by cwagner           #+#    #+#             */
-/*   Updated: 2014/03/27 15:00:43 by cwagner          ###   ########.fr       */
+/*   Created: 2014/06/10 02:49:39 by cwagner           #+#    #+#             */
+/*   Updated: 2014/06/10 02:49:39 by cwagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
-int		ft_strncmp(const char *s1, const char *s2, size_t n)
+char	*ft_strfreejoin(char **s1, char const *s2)
 {
-	unsigned int	i;
+	char	*joined;
 
-	i = 0;
-	while (i < n && (s1[i] != '\0') && (s1[i] == s2[i]))
-		i++;
-	if (i == n)
-		return (0);
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	if ((joined = ft_strjoin(*s1, s2)) == NULL)
+		return (NULL);
+	ft_strdel(s1);
+	return (joined);
 }

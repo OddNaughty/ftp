@@ -25,8 +25,6 @@
 # define FT_FALSE 0
 # define EOT "Qqengn48eiyt0+87\"ol`dm"
 
-# define ABS(x) ((x < 0) ? (-x) : (x))
-
 typedef unsigned int			t_ui;
 typedef struct s_charlist		t_charlist;
 typedef struct s_list			t_list;
@@ -97,7 +95,6 @@ char			*ft_strfreejoin(char **s1, char const *s2);
 char			*ft_glue(int nb_arg, ...);
 char			*ft_strrev(char const *s1);
 char			*ft_strtrim(char const *s);
-char			*ft_strreplace(char *s, char *to_find, char *replace);
 char			**ft_strsplit(char const *s, char c);
 char			**ft_strsplitwhite(char const *s);
 char			**ft_strsplitwhiteand(char const *s);
@@ -134,7 +131,5 @@ void			ft_putendl_sock(char const *s, int fd);
 void			ft_putendleot_sock(char const *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
 void			ft_printtabchar(char **table);
-
-int				is_directory(char *path);
 
 #endif

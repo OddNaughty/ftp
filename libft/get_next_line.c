@@ -3,69 +3,114 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cwagner <cwagner@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cwagner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/12/04 18:47:54 by cwagner           #+#    #+#             */
-/*   Updated: 2014/03/27 12:04:39 by cwagner          ###   ########.fr       */
+/*   Created: 2015/04/13 22:58:05 by cwagner           #+#    #+#             */
+/*   Updated: 2015/04/13 22:58:09 by cwagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "libft.h"
+#include "get_next_line.h"
 
-static int		malloc_more(char **buf, int size)
+static int	read_line2(int fd, char **wip)
 {
-	int		i;
-	char	*tmp;
+	char	*buf;
+	int		rode;
 
-	tmp = *buf;
-	*buf = malloc(sizeof(char) * (ft_strlen(tmp) + size + 1));
-	i = -1;
-	while (tmp[++i] != '\0')
-		(*buf)[i] = tmp[i];
-	(*buf)[i] = '\0';
-	free(tmp);
-	return (i);
-}
-
-static int		get_part(char **buf, char **line)
-{
-	char	*tmp;
-	int		i;
-
-	i = 0;
-	tmp = *buf;
-	while (tmp[i] != '\0' && tmp[i] != '\n')
-		i++;
-	if (tmp[i] != '\n')
+	if ((buf = ft_strnew(BUFF_SIZE + 1)) == NULL)
+		return (FAILURE);
+	while ((rode = read(fd, buf, BUFF_SIZE)) > 0)
+	{
+		*wip = ft_strfreejoin(wip, buf);
+		if (ft_strchr(buf, '\n') != NULL)
+			break ;
+		ft_strclr(buf);
+	}
+	ft_strdel(&buf);
+	if (rode == 0 && *wip == NULL)
 		return (0);
-	tmp[i] = '\0';
-	*line = ft_strdup(*buf);
-	*buf = ft_strdup(*buf + i + 1);
-	free(tmp);
-	return (1);
+	return (rode == -1 ? -1 : 1);
 }
 
-int				get_next_line(int const fd, char **line)
+void		wip_to_line(char **line, char **wip)
 {
-	static char		*buf = NULL;
+	char	*n;
+	char	*tmp;
+
+	n = ft_strchr(*wip, '\n');
+	if (n == NULL)
+	{
+		*line = ft_strdup(*wip);
+		ft_strdel(wip);
+		return ;
+	}
+	*line = ft_strsub(*wip, 0, ft_strlen(*wip) - ft_strlen(n));
+	tmp = ft_strsub(*wip, ft_strlen(*line) + 1, ft_strlen(n + 1));
+	ft_strdel(wip);
+	if (ft_strlen(tmp))
+		*wip = tmp;
+	ft_strdel(&tmp);
+}
+
+void		free_list(t_gnl **b_list)
+{
+	t_gnl	*tmp;
+
+	while (*b_list)
+	{
+		tmp = *b_list;
+		ft_strdel(&(tmp->wip));
+		*b_list = tmp->next;
+		free(tmp);
+	}
+	*b_list = NULL;
+}
+
+t_gnl		*add_to_list(t_gnl **b_list, int fd)
+{
+	t_gnl	*new_one;
+	t_gnl	*tmp;
+
+	new_one = malloc(sizeof(t_gnl));
+	new_one->fd = fd;
+	new_one->wip = NULL;
+	new_one->next = NULL;
+	if (*b_list == NULL)
+		*b_list = new_one;
+	else
+	{
+		tmp = *b_list;
+		while (tmp->next && tmp->fd != fd)
+			tmp = tmp->next;
+		if (tmp->fd != fd)
+			tmp->next = new_one;
+		else
+		{
+			free(new_one);
+			return (tmp);
+		}
+	}
+	return (new_one);
+}
+
+int			get_next_line(int const fd, char **line)
+{
+	static t_gnl	*b_list = NULL;
+	t_gnl			*link;
 	int				ret;
-	int				i;
-	static int		real = 1;
 
-	if (!real)
-		return (0);
-	if (buf == NULL)
-		buf = ft_strdup("");
-	if (get_part(&buf, line))
-		return (1);
-	i = malloc_more(&buf, BUF_SIZE);
-	ret = read(fd, buf + i, BUF_SIZE);
-	if (ret == -1)
-		return (-1);
-	buf[i + ret] = '\0';
-	if (ret != 0)
-		return (get_next_line(fd, line));
-	*line = ft_strdup(buf);
-	free(buf);
-	return (real--);
+	if (!line)
+		return (FAILURE);
+	*line = NULL;
+	link = add_to_list(&b_list, fd);
+	if (link->wip == NULL || ft_strchr(link->wip, '\n') == NULL)
+		if ((ret = read_line2(fd, &(link->wip))) != 1)
+		{
+			free_list(&b_list);
+			return (ret);
+		}
+	wip_to_line(line, &(link->wip));
+	return (1);
 }

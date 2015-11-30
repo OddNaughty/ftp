@@ -18,28 +18,55 @@
 
 int 	ftp_ls(t_data *data)
 {
-	struct dirent *pDirent;
-	DIR *pDir;
+//	struct dirent *pDirent;
+//	DIR *pDir;
 	char	**split;
+	pid_t 	statu;
+	pid_t	ret;
 
 	if ((split = ft_strsplitwhite(data->str)) == NULL)
 		return (FAILURE);
 	if (ft_strcmp(split[0], "ls") != SUCCESS)
 		return (CONTINUE);
-	if (split[1])
-	{
-		ft_putendleot_sock("I don't want any arguments.", data->fd_sock);
+	if ((ret = fork()) == FAILURE)
 		return (FAILURE);
-	}
-	if ((pDir = opendir(data->pwd)) == NULL)
+	else if (!ret)
 	{
-		ft_putendleot_sock("FATAL CRASH NOOB !", data->fd_sock);
-		return (FAILURE);
+		chdir(data->pwd);
+		if (dup2(data->fd_sock, 1) < 0)
+			ft_putendl("KAKAKAKA");
+		if ((execve("/bin/ls", split, NULL)) == FAILURE)
+			exit(FAILURE);
 	}
-	while ((pDirent = readdir(pDir)) != NULL)
-		ft_putendl_sock(pDirent->d_name, data->fd_sock);
-	ft_putendl_sock(EOT, data->fd_sock);
-	closedir (pDir);
+	else
+	{
+		waitpid(ret, &statu, 0);
+		ft_putendleot_sock("", data->fd_sock);
+		ft_putendl("Woohoo D:");
+	}
+	return (WIFEXITED(statu));
+	/*
+	 *     int file = open(av[1], O_APPEND | O_WRONLY | O_TRUNC);
+    if(file < 0)    return 1;
+    //Now we redirect standard output to the file using dup2
+    if(dup2(file,1) < 0)    return 1;
+    //Now standard out has been redirected, we can write to
+    // the file
+	 */
+//	if (split[1])
+//	{
+//		ft_putendleot_sock("I don't want any arguments.", data->fd_sock);
+//		return (FAILURE);
+//	}
+//	if ((pDir = opendir(data->pwd)) == NULL)
+//	{
+//		ft_putendleot_sock("FATAL CRASH NOOB !", data->fd_sock);
+//		return (FAILURE);
+//	}
+//	while ((pDirent = readdir(pDir)) != NULL)
+//		ft_putendl_sock(pDirent->d_name, data->fd_sock);
+//	ft_putendl_sock(EOT, data->fd_sock);
+//	closedir (pDir);
 	return (SUCCESS);
 }
 

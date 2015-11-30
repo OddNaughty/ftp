@@ -1,43 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cwagner <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/20 15:53:55 by cwagner           #+#    #+#             */
-/*   Updated: 2014/03/27 11:57:28 by cwagner          ###   ########.fr       */
+/*   Created: 2015/01/21 20:32:57 by cwagner           #+#    #+#             */
+/*   Updated: 2015/01/21 22:17:23 by cwagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
-void	*ft_memcpy(void *s1, const void *s2, size_t n)
+t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	unsigned char			*cp1;
-	unsigned const char		*cp2;
+	t_list		*new;
+	t_list		*tmp;
 
-	cp1 = s1;
-	cp2 = s2;
-	while (n--)
-		*cp1++ = *cp2++;
-	return (s1);
-}
-
-void	*ft_mem_not_null_cpy(void *s1, void *s2, size_t n)
-{
-	unsigned char	*cp1;
-	unsigned char	*cp2;
-	int				i;
-
-	cp1 = s1;
-	cp2 = s2;
-	i = 0;
-	while (i < (int)n)
+	new = f(lst);
+	tmp = new;
+	while (lst->next)
 	{
-		if (cp2[i] != 0)
-			cp1[i] = cp2[i];
-		i++;
+		new->next = f(lst->next);
+		lst = lst->next;
+		new = new->next;
 	}
-	return (s1);
+	new->next = NULL;
+	return (tmp);
 }

@@ -95,7 +95,7 @@ int	cmd_files(char *str, int sock)
 	if ((ft_strcmp(split[0], "get") == SUCCESS) || (ft_strcmp(split[0], "put") == SUCCESS))
 	{
 		if (!split[1])
-			return (ft_error("I need a file to get"));
+			return (ft_error("I need a file to get or put"));
 		split2 = ft_strsplit(split[1], '/');
 		file = ft_chartablength(split2) - 1;
 		if (ft_strcmp(split[0], "get") == SUCCESS)

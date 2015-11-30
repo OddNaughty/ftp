@@ -6,7 +6,7 @@
 #    By: cwagner <cwagner@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/02/25 12:34:27 by cwagner           #+#    #+#              #
-#    Updated: 2014/03/27 20:37:24 by cwagner          ###   ########.fr        #
+#    Updated: 2015/11/30 14:24:39 by cwagner          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -50,7 +50,7 @@ CLIENT =	$(addprefix $(CDIR), $(CFILES))
 OBJ_S = 	$(SERVER:.c=.o)
 OBJ_C = 	$(CLIENT:.c=.o)
 
-all: libft $(NAME_S) $(NAME_C)
+all: lib $(NAME_S) $(NAME_C)
 
 ifeq ($(DEBUG), yes)
 	@echo
@@ -62,7 +62,7 @@ else
 	@echo
 endif
 
-libft:
+lib:
 	@echo "\033[31m[Libft] \033[0m" | tr -d '\n'
 	make -C $(LIB)
 

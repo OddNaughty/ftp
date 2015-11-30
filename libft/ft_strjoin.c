@@ -19,7 +19,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		i;
 	int		sale;
 
-	len = ft_strlen(s1) + ft_strlen(s2);
+	len = (int)(ft_strlen(s1) + ft_strlen(s2));
 	new = ft_strnew(len);
 	i = 0;
 	sale = 0;

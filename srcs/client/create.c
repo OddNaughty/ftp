@@ -29,6 +29,8 @@ int		create_client(char *where, int port)
 		return (ft_error("Socket creating error"));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
+	if (!ft_strcmp("localhost", where))
+		where = ft_strdup("127.0.0.1");
 	addr.sin_addr.s_addr = inet_addr(where);
 	if (connect(sock, (const struct sockaddr *)&addr, sizeof(addr)))
 		return (ft_error("Unable to connect"));
