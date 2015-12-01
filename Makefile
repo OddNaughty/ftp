@@ -34,6 +34,7 @@ SFILES =	main.c\
 			create.c\
 			interpret.c\
 			func1.c\
+			func2.c\
 			tools.c
 
 SERVER =	$(addprefix $(SDIR), $(SFILES))

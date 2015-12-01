@@ -13,6 +13,8 @@
 #ifndef FT_P
 # define FT_P
 
+# define NB_CMD 6
+
 typedef struct s_data
 {
 	int 		fd_sock;
@@ -30,6 +32,7 @@ int 	ftp_cd(t_data *data);
 int 	ftp_pwd(t_data *data);
 int 	ftp_get(t_data *data);
 int 	ftp_put(t_data *data);
+int 	ftp_mkdir(t_data *data);
 
 int 	handle_path(t_data *data, char *path);
 

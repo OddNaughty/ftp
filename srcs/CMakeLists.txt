@@ -6,7 +6,7 @@ add_executable(serveur
         serveur/interpret.c
         serveur/main.c
         serveur/tools.c
-)
+        serveur/func2.c)
 add_executable(client
         client/main.c
         client/files.c

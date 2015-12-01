@@ -16,21 +16,22 @@
 
 int 	interpret(t_data *data)
 {
-	static int	(*doit[5])(t_data *data) =
+	static int	(*doit[NB_CMD])(t_data *data) =
 
 	{
 		ftp_ls,
 		ftp_cd,
 		ftp_get,
 		ftp_put,
-		ftp_pwd
+		ftp_pwd,
+		ftp_mkdir
 	};
 	int 		i;
 
 	i = 0;
-	while (i < 5 && (doit[i](data) == CONTINUE))
+	while (i < NB_CMD && (doit[i](data) == CONTINUE))
 		i++;
-	if (i == 5)
+	if (i == NB_CMD)
 		ft_putendleot_sock("Unknown command", data->fd_sock);
 	return (SUCCESS);
 }
