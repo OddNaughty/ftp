@@ -25,8 +25,7 @@ static int	put_file(char *file, int sock)
 	tosend = ft_strnew(1024);
 	if ((fd = open(file, O_RDONLY)) == FAILURE)
 	{
-		tosend = ft_strcpy(tosend, EOT);
-		tosend = ft_strjoin(tosend, "Can't open file...");
+		tosend = ft_strjoin(ft_strcpy(tosend, EOT), "Can't open file...");
 		send(sock, tosend, 1024, 0);
 		return (ft_error("Can't open the file..."));
 	}
@@ -41,8 +40,29 @@ static int	put_file(char *file, int sock)
 		send(sock, tosend, size, 0);
 		ft_strdel(&tosend);
 	}
-	close (fd);
+	close(fd);
 	ft_putendl("Transmission done");
+	return (SUCCESS);
+}
+
+static int	get_file2(int fd, int sock)
+{
+	char	*str;
+	ssize_t	size;
+
+	str = ft_strnew(1024);
+	while ((size = recv(sock, str, 1024, 0)) == 1024)
+	{
+		write(fd, str, size);
+		ft_strdel(&str);
+		str = ft_strnew(1024);
+	}
+	if (size == FAILURE)
+		return (ft_error("Got a problem while receiving"));
+	write(fd, str, size);
+	ft_strdel(&str);
+	close(fd);
+	ft_putendl("File successfully get");
 	return (SUCCESS);
 }
 
@@ -60,7 +80,8 @@ static int	get_file(char *file, int sock)
 		ft_putendl(str + ft_strlen(EOT));
 		return (SUCCESS);
 	}
-	if ((fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR)) == FAILURE)
+	if ((fd = open(file, O_WRONLY | O_CREAT |
+		O_TRUNC, S_IRUSR | S_IWUSR)) == FAILURE)
 		return (ft_error("Open failed..."));
 	write(fd, str, size);
 	if (size < 1024)
@@ -69,38 +90,24 @@ static int	get_file(char *file, int sock)
 		return (SUCCESS);
 	}
 	ft_strdel(&str);
-	str = ft_strnew(1024);
-	while ((size = recv(sock, str, 1024, 0)) == 1024)
-	{
-		write(fd, str, size);
-		ft_strdel(&str);
-		str = ft_strnew(1024);
-	}
-	if (size == FAILURE)
-		return (ft_error("Got a problem while receiving"));
-	write(fd, str, size);
-	ft_strdel(&str);
-	close (fd);
-	ft_putendl("File successfully get");
-	return (SUCCESS);
+	return (get_file2(fd, sock));
 }
 
-int	cmd_files(char *str, int sock)
+int			cmd_files(char *str, int sock)
 {
 	char	**split;
 	char	**split2;
-	int		file;
 
 	split = ft_strsplitwhite(str);
-	if ((ft_strcmp(split[0], "get") == SUCCESS) || (ft_strcmp(split[0], "put") == SUCCESS))
+	if ((ft_strcmp(split[0], "get") == SUCCESS)
+		|| (ft_strcmp(split[0], "put") == SUCCESS))
 	{
 		if (!split[1])
 			return (ft_error("I need a file to get or put"));
 		split2 = ft_strsplit(split[1], '/');
-		file = ft_chartablength(split2) - 1;
 		if (ft_strcmp(split[0], "get") == SUCCESS)
 		{
-			if (get_file(split2[file], sock) == FAILURE)
+			if (get_file(split2[ft_chartablength(split2) - 1], sock) == FAILURE)
 				return (FAILURE);
 			return (SUCCESS);
 		}

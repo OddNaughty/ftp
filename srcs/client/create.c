@@ -17,11 +17,11 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int		create_client(char *where, int port)
+int	create_client(char *where, int port)
 {
 	int					sock;
 	struct protoent		*proto;
-    struct sockaddr_in	addr;
+	struct sockaddr_in	addr;
 
 	if ((proto = getprotobyname("tcp")) == NULL)
 		return (ft_error("Can't get protocol"));

@@ -10,33 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_P
-# define FT_P
+#ifndef FT_P_H
+# define FT_P_H
 
 # define NB_CMD 6
 
-typedef struct s_data
+typedef struct	s_data
 {
-	int 		fd_sock;
+	int			fd_sock;
 	char		*str;
 	char		*pwd;
 }				t_data;
 
-int		create_server(int port);
-int		create_client(char *addr, int port);
+int				create_server(int port);
+int				create_client(char *addr, int port);
 
-int 	interpret(t_data *data);
+int				interpret(t_data *data);
 
-int 	ftp_ls(t_data *data);
-int 	ftp_cd(t_data *data);
-int 	ftp_pwd(t_data *data);
-int 	ftp_get(t_data *data);
-int 	ftp_put(t_data *data);
-int 	ftp_mkdir(t_data *data);
+int				ftp_ls(t_data *data);
+int				ftp_cd(t_data *data);
+int				ftp_pwd(t_data *data);
+int				ftp_get(t_data *data);
+int				ftp_put(t_data *data);
+int				ftp_mkdir(t_data *data);
 
-int 	handle_path(t_data *data, char *path);
+int				handle_path(t_data *data, char *path);
 
-int 	cmd_files(char *str, int sock);
-
+int				cmd_files(char *str, int sock);
 
 #endif

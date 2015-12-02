@@ -6,7 +6,7 @@
 /*   By: cwagner <cwagner@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/13 17:31:27 by cwagner           #+#    #+#             */
-/*   Updated: 2014/05/14 18:33:47 by cwagner          ###   ########.fr       */
+/*   Updated: 2015/12/02 14:06:20 by cwagner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,11 @@
 #include "libft.h"
 #include <sys/socket.h>
 
-int 	interpret(t_data *data)
+int		interpret(t_data *data)
 {
 	static int	(*doit[NB_CMD])(t_data *data) =
-
-	{
-		ftp_ls,
-		ftp_cd,
-		ftp_get,
-		ftp_put,
-		ftp_pwd,
-		ftp_mkdir
-	};
-	int 		i;
+	{ftp_ls, ftp_cd, ftp_get, ftp_put, ftp_pwd, ftp_mkdir};
+	int			i;
 
 	i = 0;
 	while (i < NB_CMD && (doit[i](data) == CONTINUE))

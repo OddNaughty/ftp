@@ -15,9 +15,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-static int 	receive(int sock, char *str)
+static int	receive(int sock, char *str)
 {
-	int 	i;
+	int		i;
 
 	i = 0;
 	while (str[i] == ' ' || str[i] == '\t')
@@ -26,10 +26,7 @@ static int 	receive(int sock, char *str)
 		return (SUCCESS);
 	ft_putendl_sock(str, sock);
 	if (ft_strcmp(str, "quit") == SUCCESS)
-	{
-		ft_strdel(&str);
 		return (FAILURE);
-	}
 	if (cmd_files(str, sock) != CONTINUE)
 		return (SUCCESS);
 	ft_strdel(&str);
@@ -46,7 +43,7 @@ static int 	receive(int sock, char *str)
 	return (FAILURE);
 }
 
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	int					port;
 	int					sock;
@@ -57,10 +54,12 @@ int		main(int ac, char **av)
 	port = ft_atoi(av[2]);
 	if ((sock = create_client(av[1], port)) == FAILURE)
 		return (FAILURE);
-	while (ft_putstr("\033[36mCeciEstUnPrompt>\033[0m "), get_next_line(0, &str))
+	ft_putstr("\033[36mCeciEstUnPrompt>\033[0m ");
+	while (get_next_line(0, &str))
 	{
 		if (receive(sock, str) == FAILURE)
 			break ;
+		ft_putstr("\033[36mCeciEstUnPrompt>\033[0m ");
 	}
 	close(sock);
 	return (SUCCESS);

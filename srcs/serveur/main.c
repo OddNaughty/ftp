@@ -22,7 +22,8 @@ static int		treatment(int sock, int cs)
 	close(sock);
 	data.fd_sock = cs;
 	data.pwd = ft_strdup("./");
-	while (ft_putstr("A l'écoute : "), gnl_sock(cs, &(data.str)))
+	ft_putstr("A l'écoute : ");
+	while (gnl_sock(cs, &(data.str)))
 	{
 		if (ft_strcmp(data.str, "quit") == SUCCESS)
 			break ;
@@ -32,17 +33,19 @@ static int		treatment(int sock, int cs)
 			interpret(&data);
 			ft_strdel(&(data.str));
 		}
+		ft_putstr("A l'écoute : ");
 	}
 	close(cs);
-	exit (SUCCESS);
+	exit(SUCCESS);
 }
 
 static int		acpt(int sock)
 {
-	int 				cs;
+	int					cs;
 	unsigned int		addr_len;
 	struct sockaddr_in	addr;
 
+	ft_putendl("Waiting for a connection");
 	while (1)
 	{
 		addr_len = sizeof(addr);
@@ -55,7 +58,7 @@ static int		acpt(int sock)
 	return (SUCCESS);
 }
 
-int			main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	int					port;
 	int					sock;
